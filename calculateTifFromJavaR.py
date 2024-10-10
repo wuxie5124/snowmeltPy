@@ -131,7 +131,7 @@ def getMLModule(machinestr):
             if(value == "Default"):
                 continue;            
             elif(param == "C"):
-                model.random_state = float(value)   
+                model.C = float(value)
             elif(param == "kernel"):
                 model.kernel = value
 

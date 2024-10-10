@@ -15,12 +15,11 @@ import warnings
 warnings.filterwarnings('ignore')
 
 if __name__  ==  "__main__" :
-    # a = []
-    # for i in range(1, len(sys.argv)):
-    #     a.append(sys.argv[i])
-    # excel_path = a[0]
-    data=pd.read_excel(r"E:\TeacherLiu\建模参数.xls")
-    
+    a = []
+    for i in range(1, len(sys.argv)):
+        a.append(sys.argv[i])
+    excel_path = a[0]
+    data=pd.read_excel(excel_path)
     datav = data.values 
     # print(stats.spearmanr(datav, datav)[0][len(datav)-1])
     spearmanr = []
