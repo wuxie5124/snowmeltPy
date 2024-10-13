@@ -209,7 +209,8 @@ def normalize_geotiff_data(geotiff_list, mask=None):
     # 遍历所有地理影像数据并归一化处理
     for geotiff_data in geotiff_list:
         data = geotiff_data['data']
-        normalized_data = (data - np.min(data)) / (np.max(data) - np.min(data)) + 0.5
+        # 之前不知为何需要 +0.5 现在予以删除
+        normalized_data = (data - np.min(data)) / (np.max(data) - np.min(data))
         if mask is not None:
             normalized_data = normalized_data * mask
         normalized_geotiff_data = {
@@ -235,11 +236,12 @@ def lonlat2geo(geotiff_data, lon, lat):
     :param geotiff_data: 地理影像数据及其各种信息的字典
     :param lon: 地理坐标lon经度
     :param lat: 地理坐标lat纬度
-    :return: 经纬度坐标(lon, lat)对应的投影坐标
+    :return: 经纬度坐标 (lat, lat)对应的投影坐标
     '''
     prosrs = geotiff_data['prosrs']
     geosrs = geotiff_data['geosrs']
     ct = osr.CoordinateTransformation(geosrs, prosrs)
+    # 这里输入别为纬度与经度。输出的也是纬度与经度对应的y，x。
     coords = ct.TransformPoint(lat, lon)
     return coords[:2]
 
@@ -261,8 +263,8 @@ def extract_pixel_values(geotiff_list, lonlat_list):
         for lonlat in lonlat_list:
             # 将经纬度坐标转换为当前影像的投影坐标
             lon, lat = lonlat
-            # x, y = lonlat2geo(geotiff_data, lon, lat)
-            x, y = lon, lat
+            y, x = lonlat2geo(geotiff_data, lon, lat)
+            # x, y = lon, lat
             # 将投影坐标转换为像素坐标
             gt = geotiff_data['geotransform']
             px = int((x - gt[0]) / gt[1])
@@ -273,7 +275,8 @@ def extract_pixel_values(geotiff_list, lonlat_list):
 
             # 如果像素值为nodata值，则将其替换为NaN
             if pixel_value == geotiff_data['nodata']:
-                pixel_value = np.nan
+                #由于现有影像预处理将nodata设置为0，导致具有实际意义的0变为nodata，这里设置回来
+                pixel_value = 0
 
             # 将当前像素值添加到列表中
             current_pixel_values.append(pixel_value)
@@ -300,7 +303,7 @@ def plot_lonlat_on_geotiff(geotiff_list, lonlat_points):
     x, y = [], []
     for point in lonlat_points:
         lon, lat = point
-        px, py = lonlat2geo(geotiff_data, lon, lat)
+        py, px = lonlat2geo(geotiff_data, lon, lat)
         x.append(px)
         y.append(py)
 

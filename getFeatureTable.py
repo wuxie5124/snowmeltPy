@@ -97,10 +97,10 @@ def preProcess():
     # pre.plot_lonlat_on_geotiff(geotiff_list_5_preprocess2, lonlat_list)
     
     # 删除多余变量
-    keep_variable = "geotiff_list_5_preprocess2"
-    variable_names = [var for var in dir() if not var.startswith("_") and var != keep_variable]
-    for var in variable_names:
-        delattr(sys.modules[__name__], var)
+    # keep_variable = "geotiff_list_5_preprocess2"
+    # variable_names = [var for var in dir() if not var.startswith("_") and var != keep_variable]
+    # for var in variable_names:
+    #     delattr(sys.modules[__name__], var)
 
 
 if __name__  ==  "__main__" :
@@ -115,10 +115,10 @@ if __name__  ==  "__main__" :
     # 输出的用于训练的特征的路径
     sample_extract_path = a[3]
     
-    # folder_path = r"C:\Users\zjm\Desktop\新疆区域融雪洪水强度预测特征集"
-    # output_folder_path = r"C:\Users\zjm\Desktop\outtif"
-    # sampleXY_path = r"C:\Users\zjm\Desktop\新疆经纬度数据.xls"
-    # sample_extract_path = r"C:\Users\zjm\Desktop\新疆经纬度数据2.xls"
+    # folder_path = r"E:\TeacherLiu\TIf数据_坐标转换3"
+    # output_folder_path = r"E:\TeacherLiu\result"
+    # sampleXY_path = r"E:\TeacherLiu\lat.xls"
+    # sample_extract_path = r"E:\TeacherLiu\lat2.xls"
     preProcess()
     
 
